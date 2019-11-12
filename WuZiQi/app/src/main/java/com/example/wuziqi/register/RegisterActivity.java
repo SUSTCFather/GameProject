@@ -2,6 +2,7 @@ package com.example.wuziqi.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,9 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.example.wuziqi.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;
+import com.example.wuziqi.login.LoginActivity;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, RegisterContract.RegisterView {
 
@@ -28,7 +31,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText mPasswordInput;
 
     private TextView verifyBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,23 +68,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.register_btn:
                 register();
-//                Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
-//                Intent it1 = new Intent(RegisterActivity.this, LoginActivity.class);
-//                startActivity(it1);
-//                finish();
                 break;
         }
     }
 
     @Override
     public void showRegister(UserResponse response) {
-        Toast.makeText(this, JSON.toJSONString(response), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+        if(response.getStatus() == Constant.SUCCESS) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.USER_NAME, mUserNameInput.getText().toString());
+            bundle.putString(Constant.PASSWORD, mPasswordInput.getText().toString());
+            Intent it = new Intent(RegisterActivity.this, LoginActivity.class);
+            it.putExtras(bundle);
+            startActivity(it);
+            finish();
+        }
     }
 
     @Override
     public void showVerify(UserResponse response) {
-
-        Toast.makeText(this, JSON.toJSONString(response), Toast.LENGTH_LONG).show();
+        if(response.getStatus() == Constant.SUCCESS) {
+            startTimer();
+        }
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     private void verify() {
@@ -100,8 +109,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         request.setUserName(userName);
         request.setMailAddress(mailAddress);
         presenter.doVerify(request);
-        //设置verifyBtn
-        startTimer();
     }
 
     private void startTimer(){

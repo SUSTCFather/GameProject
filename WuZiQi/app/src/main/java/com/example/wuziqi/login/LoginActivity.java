@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +21,8 @@ import com.example.wuziqi.forget.ForgetActivity;
 import com.example.wuziqi.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginContract.LoginView {
+    private static final String TAG = "LoginActivity";
+
     private LoginPresenterIml presenter;
 
     private EditText mUserNameInput;
@@ -33,6 +36,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         presenter = new LoginPresenterIml();
         presenter.attachView(this);
         initView();
+        Log.e(TAG,"onCreate");
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            mUserNameInput.setText(bundle.getString(Constant.USER_NAME));
+            mPasswordInput.setText(bundle.getString(Constant.PASSWORD));
+        }else {
+            mUserNameInput.setText("");
+            mPasswordInput.setText("");
+        }
+        Log.e(TAG,"onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG,"onResume");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     private void initView(){

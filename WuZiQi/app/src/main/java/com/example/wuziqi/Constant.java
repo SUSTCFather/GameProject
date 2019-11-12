@@ -5,6 +5,10 @@ public class Constant {
 
     public static int FAIL = 0;
 
+    public static String USER_NAME = "username";
+
+    public static String PASSWORD = "password";
+
 
 
 }

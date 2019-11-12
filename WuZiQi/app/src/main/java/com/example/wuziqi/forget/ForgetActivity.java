@@ -2,6 +2,7 @@ package com.example.wuziqi.forget;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,9 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.example.wuziqi.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;
+import com.example.wuziqi.login.LoginActivity;
 import com.example.wuziqi.register.TimeCount;
 
 public class ForgetActivity extends AppCompatActivity implements View.OnClickListener,ForgetContract.ForgetView {
@@ -55,12 +58,20 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void showChange(UserResponse response) {
-        Toast.makeText(this, JSON.toJSONString(response), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+        if(response.getStatus() == Constant.SUCCESS) {
+            Intent it = new Intent(ForgetActivity.this, LoginActivity.class);
+            startActivity(it);
+            finish();
+        }
     }
 
     @Override
     public void showVerify(UserResponse response) {
-        Toast.makeText(this, JSON.toJSONString(response), Toast.LENGTH_LONG).show();
+        if(response.getStatus() == Constant.SUCCESS) {
+            startTimer();
+        }
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
