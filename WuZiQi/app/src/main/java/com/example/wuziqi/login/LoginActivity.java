@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.wuziqi.Constant;
+import com.example.wuziqi.GameActivity;
 import com.example.wuziqi.R;
+import com.example.wuziqi.SharedUtil;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;
 import com.example.wuziqi.forget.ForgetActivity;
@@ -51,13 +53,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mUserNameInput.setText("");
             mPasswordInput.setText("");
         }
-        Log.e(TAG,"onStart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG,"onResume");
     }
 
     @Override
@@ -81,10 +76,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void showLogin(UserResponse loginResponse) {
-        if(loginResponse.getStatus() == Constant.SUCCESS) {
-            //todo
-        }
         Toast.makeText(this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+        if(loginResponse.getStatus() == Constant.SUCCESS) {
+            SharedUtil.getInstance(this).writeShared(Constant.USER_DATA,JSON.toJSONString(loginResponse.getData()));
+            Intent intent = new Intent(LoginActivity.this, GameActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     private void login() {

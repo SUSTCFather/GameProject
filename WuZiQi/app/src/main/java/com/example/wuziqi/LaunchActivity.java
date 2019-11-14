@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,8 +17,18 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkLogin();
         setContentView(R.layout.activity_launch);
         initView();
+    }
+
+    private void checkLogin() {
+        String userData = SharedUtil.getInstance(this).readShared(Constant.USER_DATA,null);
+        if(!TextUtils.isEmpty(userData)) {
+            Intent intent = new Intent(LaunchActivity.this, GameActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void initView() {

@@ -1,4 +1,4 @@
-package com.example.gameproject.bean;
+package com.example.gameproject.bean.model;
 
 
 import javax.persistence.Entity;

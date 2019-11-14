@@ -3,7 +3,7 @@ package com.example.gameproject.web;
 import com.example.gameproject.HttpUtil;
 import com.example.gameproject.bean.request.RegisterRequest;
 import com.example.gameproject.bean.response.HttpResult;
-import com.example.gameproject.bean.User;
+import com.example.gameproject.bean.model.User;
 import com.example.gameproject.service.MailService;
 import com.example.gameproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

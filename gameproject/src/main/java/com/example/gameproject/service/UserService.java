@@ -1,11 +1,10 @@
 package com.example.gameproject.service;
 
-import com.alibaba.fastjson.JSON;
 import com.example.gameproject.HttpUtil;
 import com.example.gameproject.api.UserRepository;
 import com.example.gameproject.bean.request.RegisterRequest;
 import com.example.gameproject.bean.response.HttpResult;
-import com.example.gameproject.bean.User;
+import com.example.gameproject.bean.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

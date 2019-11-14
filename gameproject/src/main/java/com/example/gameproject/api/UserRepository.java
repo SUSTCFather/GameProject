@@ -1,6 +1,6 @@
 package com.example.gameproject.api;
 
-import com.example.gameproject.bean.User;
+import com.example.gameproject.bean.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

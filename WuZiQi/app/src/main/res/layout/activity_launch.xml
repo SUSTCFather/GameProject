@@ -26,10 +26,9 @@
         >
 
         <ImageView
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="150dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bull_head"
+            android:src="@drawable/ic_launch"
             android:layout_marginBottom="10dp"
             />
 

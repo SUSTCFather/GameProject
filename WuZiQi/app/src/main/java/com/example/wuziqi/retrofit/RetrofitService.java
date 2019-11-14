@@ -1,7 +1,9 @@
 package com.example.wuziqi.retrofit;
 
 
+import com.example.wuziqi.bean.request.QuestionRequest;
 import com.example.wuziqi.bean.request.UserRequest;
+import com.example.wuziqi.bean.response.QuestionResponse;
 import com.example.wuziqi.bean.response.UserResponse;
 
 import io.reactivex.Observable;
@@ -28,6 +30,10 @@ public interface RetrofitService {
     //修改密码
     @POST("/user/changePassword")
     Observable<UserResponse> changePassword(@Body UserRequest request);
+
+    //获取题目
+    @POST("/question/get")
+    Observable<QuestionResponse> getQuestion(@Body QuestionRequest request);
 
 
 

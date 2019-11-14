@@ -13,7 +13,7 @@ public class SharedUtil {
 	 * @param ctx ctx
 	 * @return shared utility
 	 */
-	public static SharedUtil getIntance(Context ctx) {
+	public static SharedUtil getInstance(Context ctx) {
 		if (mUtil == null) {
 			mUtil = new SharedUtil();
 		}

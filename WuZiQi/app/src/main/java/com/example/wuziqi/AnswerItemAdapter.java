@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.wuziqi.bean.Answer;
 import com.example.wuziqi.view.AnswerItemView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerItemAdapter extends BaseAdapter {
 
-    private List<AnswerChoice> mList;
+    private List<Answer> mList;
     private Context mContext;
 
-    public AnswerItemAdapter(Context context, List<AnswerChoice> list){
-        mList = list;
+    public AnswerItemAdapter(Context context){
+        mList = new ArrayList<>();
         mContext = context;
     }
 
@@ -36,6 +38,12 @@ public class AnswerItemAdapter extends BaseAdapter {
         return pos;
     }
 
+    public void refreshData(List<Answer> list) {
+        mList.clear();
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int pos, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
@@ -49,7 +57,7 @@ public class AnswerItemAdapter extends BaseAdapter {
         }
 
         holder.itemView.setContentText(mList.get(pos).getContent());
-        holder.itemView.setOptionText(mList.get(pos).getOption());
+        holder.itemView.setOptionText(mList.get(pos).getSymbol());
         return view;
     }
 

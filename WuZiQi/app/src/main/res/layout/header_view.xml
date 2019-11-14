@@ -4,7 +4,6 @@
     android:id="@+id/question_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="题目"
     android:textSize="16sp"
     android:textColor="@color/colorBlack"
     android:paddingBottom="15dp"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.wuziqi.question.QuestionActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -13,7 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * 参考鸿洋大神慕课视频：http://www.imooc.com/learn/641
  * -刘某人程序员
  */
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     //重来按钮
     private FloatingActionButton fab;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         game = (GameView) findViewById(R.id.mGameView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                game.RestartGame();
-                Intent intent = new Intent(MainActivity.this,QuestionActivity.class);
+                Intent intent = new Intent(GameActivity.this, QuestionActivity.class);
                 startActivity(intent);
             }
         });
