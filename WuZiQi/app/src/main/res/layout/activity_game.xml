@@ -14,7 +14,7 @@
 
         />
 
-    <com.example.wuziqi.GameView
+    <com.example.wuziqi.view.GameView
         android:id="@+id/mGameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

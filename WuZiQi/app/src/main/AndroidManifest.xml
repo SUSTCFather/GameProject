@@ -17,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name=".MyApplication"
         android:usesCleartextTraffic="true">
         <activity android:name=".forget.ForgetActivity"></activity>
         <activity android:name=".LaunchActivity">
@@ -31,7 +32,12 @@
             android:name=".login.LoginActivity"
             android:launchMode="singleTask" />
         <activity android:name=".question.QuestionActivity" />
-        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".game.GameActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".main.MainActivity"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

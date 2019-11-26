@@ -5,9 +5,25 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="colorBlack">#000000</color>
-    <color name="black202020">#202020</color>
+    <color name="colorTextBlack">#2C2C2C</color>
+
     <color name="colorWhite">#ffffff</color>
     <color name="colorGray">#645C5C</color>
+
+    <color name="colorDiv">#E5E5E5</color>
+    <color name="colorNav">#8D7A71</color>
+    <color name="colorYellow">#FFC800</color>
+    <color name="colorBlue">#1E90FF</color>
+
+    <color name="colorMineBg">#E8EDF3</color>
+    <color name="colorTopBar">#2DD0CF</color>
+
+    <color name="red_btn_normal">#EB424D</color>
+    <color name="red_btn_press">#CC3139</color>
+
+    <color name="red_btn_text_70">#EAACAF</color>
+    <color name="item_click_bg_color">#E9EDED</color>
+
 
 
 </resources>

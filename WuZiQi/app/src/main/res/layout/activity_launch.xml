@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorGray"
+    android:background="@drawable/ic_launch_bg"
     >
 
     <androidx.constraintlayout.widget.Guideline
@@ -61,7 +61,8 @@
             android:text="登录"
             android:textColor="@color/colorWhite"
             android:gravity="center"
-            android:background="@color/colorAccent"
+            android:background="#802DD0CF"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_marginBottom="10dp"
             />
 
@@ -74,7 +75,8 @@
             android:text="注册"
             android:textColor="@color/colorWhite"
             android:gravity="center"
-            android:background="@color/colorAccent"
+            android:background="#80645C5C"
+            android:foreground="?attr/selectableItemBackground"
             />
 
 

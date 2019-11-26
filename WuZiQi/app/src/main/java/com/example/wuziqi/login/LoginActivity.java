@@ -14,12 +14,12 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.wuziqi.Constant;
-import com.example.wuziqi.GameActivity;
 import com.example.wuziqi.R;
 import com.example.wuziqi.SharedUtil;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;
 import com.example.wuziqi.forget.ForgetActivity;
+import com.example.wuziqi.main.MainActivity;
 import com.example.wuziqi.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginContract.LoginView {
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toast.makeText(this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
         if(loginResponse.getStatus() == Constant.SUCCESS) {
             SharedUtil.getInstance(this).writeShared(Constant.USER_DATA,JSON.toJSONString(loginResponse.getData()));
-            Intent intent = new Intent(LoginActivity.this, GameActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
 

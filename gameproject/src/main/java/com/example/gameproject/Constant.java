@@ -1,7 +1,7 @@
 package com.example.gameproject;
 
 
-public class HttpUtil {
+public class Constant {
     public static int SUCCESS = 1;
 
     public static int FAIL = 0;

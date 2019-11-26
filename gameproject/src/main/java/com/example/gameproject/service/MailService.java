@@ -1,10 +1,10 @@
 package com.example.gameproject.service;
 
-import com.example.gameproject.HttpUtil;
+import com.example.gameproject.Constant;
 import com.example.gameproject.SendMail;
 import com.example.gameproject.api.MailRepository;
 import com.example.gameproject.bean.model.Mail;
-import com.example.gameproject.bean.request.RegisterRequest;
+import com.example.gameproject.bean.request.UserRequest;
 import com.example.gameproject.bean.response.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,11 +37,11 @@ public class MailService {
         //send email
         boolean result = sendMail.sendMessage();
         if (result) {
-            httpResult.setStatus(HttpUtil.SUCCESS);
+            httpResult.setStatus(Constant.SUCCESS);
             httpResult.setMessage("验证码已发送");
             saveCheckCode(mailAddress,checkCode);
         } else {
-            httpResult.setStatus(HttpUtil.FAIL);
+            httpResult.setStatus(Constant.FAIL);
             httpResult.setMessage("验证码发送失败");
         }
         return httpResult;
@@ -68,7 +68,7 @@ public class MailService {
      * @param request
      * @return
      */
-    public boolean verifyCheckCode(RegisterRequest request) {
+    public boolean verifyCheckCode(UserRequest request) {
         List<Mail> lists = mailRepository.findByMailAddress(request.getMailAddress());
         if (!lists.isEmpty()) {
             Mail m = lists.get(0);

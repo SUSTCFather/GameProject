@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.wuziqi.login.LoginActivity;
+import com.example.wuziqi.main.MainActivity;
 import com.example.wuziqi.register.RegisterActivity;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,7 +26,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     private void checkLogin() {
         String userData = SharedUtil.getInstance(this).readShared(Constant.USER_DATA,null);
         if(!TextUtils.isEmpty(userData)) {
-            Intent intent = new Intent(LaunchActivity.this, GameActivity.class);
+            Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }

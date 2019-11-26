@@ -1,9 +1,9 @@
 package com.example.gameproject.bean.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author 伍凯铭
@@ -20,6 +20,14 @@ public class User {
     private String userName;
     private String password;
     private String mailAddress;
+
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
+    private List<Relationship> followUsers;
+
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
+    private List<Relationship> followers;
 
     public User(){
 
@@ -55,5 +63,21 @@ public class User {
 
     public void setMailAddress(String mailAddress) {
         this.mailAddress = mailAddress;
+    }
+
+    public List<Relationship> getFollowUsers() {
+        return followUsers;
+    }
+
+    public void setFollowUsers(List<Relationship> followUsers) {
+        this.followUsers = followUsers;
+    }
+
+    public List<Relationship> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Relationship> followers) {
+        this.followers = followers;
     }
 }
