@@ -1,21 +1,25 @@
 package com.example.wuziqi.game;
 
+import com.example.wuziqi.bean.request.EnterRequest;
+import com.example.wuziqi.bean.response.EnterResponse;
+import com.example.wuziqi.bean.response.HallResponse;
+
 public interface GameContract {
 
     interface GameView {
+       void showExit(EnterResponse response);
 
-        void showMessage(String message);
+       void showHallInfo(HallResponse response);
 
+       void showReady(EnterResponse response);
     }
 
     interface GamePresenter {
+       void doExit(EnterRequest request);
 
-        void openConnect(String userId);
+       void getHallInfo(int hallId);
 
-        void closeConnect();
-
+       void doReady(EnterRequest request);
     }
-
-
 
 }

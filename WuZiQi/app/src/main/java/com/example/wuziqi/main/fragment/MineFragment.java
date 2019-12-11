@@ -17,7 +17,7 @@ import com.example.wuziqi.LaunchActivity;
 import com.example.wuziqi.R;
 import com.example.wuziqi.SharedUtil;
 import com.example.wuziqi.bean.User;
-import com.example.wuziqi.main.dialog.ExitDialog;
+import com.example.wuziqi.dialog.ExitDialog;
 
 
 public class MineFragment extends Fragment implements View.OnClickListener {

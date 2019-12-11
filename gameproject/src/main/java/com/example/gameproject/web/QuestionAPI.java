@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionAPI {
 
     @Autowired
-    private TestService testService;
-
-    @Autowired
     private QuestionService questionService;
 
-    @PostMapping("/get")
-    public HttpResult getQuestion(@RequestBody QuestionRequest request) {
-        return questionService.getQuestion(request);
+    @GetMapping("/get")
+    public HttpResult getQuestion() {
+        return questionService.getQuestion();
     }
 }

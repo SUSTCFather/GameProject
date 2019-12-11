@@ -1,6 +1,5 @@
 package com.example.wuziqi.question;
 
-import com.example.wuziqi.bean.request.QuestionRequest;
 import com.example.wuziqi.bean.response.QuestionResponse;
 
 public interface QuestionContract {
@@ -13,7 +12,7 @@ public interface QuestionContract {
 
     interface QuestionPresenter{
 
-        void doGetQuestion(QuestionRequest request);
+        void doGetQuestion();
 
     }
 }

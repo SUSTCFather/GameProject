@@ -8,7 +8,7 @@ import com.example.wuziqi.retrofit.HttpHandler;
 
 import io.reactivex.Observable;
 
-public class FriendDataManager extends BaseDataManager<FriendRequest, FriendResponse>{
+public class FriendDataManager extends BaseDataManager<FriendResponse>{
 
     public FriendDataManager(HttpHandler<FriendResponse> handler) {
         super(handler);

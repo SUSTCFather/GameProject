@@ -9,12 +9,40 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 
-public class GameWebSocketClient extends WebSocketClient {
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+public class GameWebSocketClient extends WebSocketClient implements Observer<String> {
 
     private OnMessageHandler messageHandler;
 
     public GameWebSocketClient(URI serverUri) {
         super(serverUri);
+    }
+
+    @Override
+    public void onSubscribe(Disposable d) {
+
+    }
+
+    @Override
+    public void onNext(String s) {
+        if(messageHandler != null) {
+            messageHandler.onMessage(s);
+        }
+    }
+
+    @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
+    public void onComplete() {
+
     }
 
     @Override
@@ -24,19 +52,23 @@ public class GameWebSocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        if(messageHandler != null) {
-            messageHandler.onMessage(message);
-        }
+       Observable.just(message)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
         Log.e("GameWebSocketClient", "onClose()");
+        if(messageHandler != null) {
+            messageHandler.onClose(reason);
+        }
     }
 
     @Override
     public void onError(Exception ex) {
-        Log.e("GameWebSocketClient", "onError()");
+        Log.e("GameWebSocketClient", "onError() "+ex.getMessage());
     }
 
     public void setMessageHandler(OnMessageHandler messageHandler) {

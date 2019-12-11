@@ -1,69 +1,74 @@
 package com.example.wuziqi.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.alibaba.fastjson.JSON;
 import com.example.wuziqi.Constant;
 import com.example.wuziqi.MyApplication;
 import com.example.wuziqi.R;
 import com.example.wuziqi.SharedUtil;
+import com.example.wuziqi.bean.Hall;
 import com.example.wuziqi.bean.User;
-import com.example.wuziqi.main.fragment.HomeFragment;
+import com.example.wuziqi.bean.response.HallResponse;
+import com.example.wuziqi.bean.response.HttpResult;
+import com.example.wuziqi.main.fragment.hall.HallFragment;
 import com.example.wuziqi.main.fragment.MineFragment;
+import com.example.wuziqi.websocket.GameWebSocketClient;
+import com.example.wuziqi.websocket.OnMessageHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMessageHandler {
 
-    private HomeFragment homeFragment;
+    private static final String TAG = "MainActivity";
+
+    private HallFragment hallFragment;
 
     private MineFragment mineFragment;
+
+    private User nowUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String userData = SharedUtil.getInstance(this).readShared(Constant.USER_DATA,null);
-        if(userData != null) {
-            User user = JSON.parseObject(userData, User.class);
-            MyApplication.startClient(user.getUserId()+"");
-        }
+        hallFragment = HallFragment.newInstance();
+        mineFragment = MineFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, getHomeFragment())
-                .add(R.id.fragment_container, getMineFragment())
-                .hide(getMineFragment())
+                .add(R.id.fragment_container, hallFragment)
+                .add(R.id.fragment_container, mineFragment)
+                .hide(mineFragment)
                 .commit();
         initBottomNavigation();
+        String userData = SharedUtil.getInstance(this).readShared(Constant.USER_DATA,null);
+        if(userData != null) {
+            nowUser = JSON.parseObject(userData, User.class);
+        }
     }
 
-    private HomeFragment getHomeFragment() {
-        if(homeFragment == null) {
-            homeFragment = HomeFragment.newInstance();
-        }
-        return homeFragment;
-    }
-
-    private MineFragment getMineFragment() {
-        if(mineFragment == null) {
-            mineFragment = MineFragment.newInstance();
-        }
-        return mineFragment;
+    @Override
+    protected void onResume() {
+        Log.e(TAG,"onResume");
+        super.onResume();
+        MyApplication.initClient(nowUser.getUserId()+"");
+        MyApplication.setMessageHandler(this);
     }
 
     private void showFragment(int itemId) {
         if(itemId == R.id.menu_home) {
             getSupportFragmentManager().beginTransaction()
-                    .show(getHomeFragment())
-                    .hide(getMineFragment())
+                    .show(hallFragment)
+                    .hide(mineFragment)
                     .commit();
         }else {
             getSupportFragmentManager().beginTransaction()
-                    .show(getMineFragment())
-                    .hide(getHomeFragment())
+                    .show(mineFragment)
+                    .hide(hallFragment)
                     .commit();
         }
     }
@@ -77,6 +82,26 @@ public class MainActivity extends AppCompatActivity {
                 showFragment(item.getItemId());
                 // 这里注意返回true,否则点击失效
                 return true;
+            }
+        });
+    }
+
+    @Override
+    public void onMessage(String message) {
+        Log.e(TAG,message);
+        HttpResult result = JSON.parseObject(message,HttpResult.class);
+        if(result.getMessage().equals("HallList")) {
+            HallResponse responseHall = JSON.parseObject(message,HallResponse.class);
+            hallFragment.refresh(responseHall.getData());
+        }
+    }
+
+    @Override
+    public void onClose(final String reason) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "socket关闭: "+reason, Toast.LENGTH_SHORT).show();
             }
         });
     }

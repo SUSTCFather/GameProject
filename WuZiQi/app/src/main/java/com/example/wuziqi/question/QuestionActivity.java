@@ -2,32 +2,27 @@ package com.example.wuziqi.question;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.AnswerChoice;
-import com.example.wuziqi.AnswerItemAdapter;
 import com.example.wuziqi.Constant;
 import com.example.wuziqi.R;
-import com.example.wuziqi.bean.request.QuestionRequest;
 import com.example.wuziqi.bean.response.QuestionResponse;
+import com.example.wuziqi.dialog.ExitDialog;
 import com.example.wuziqi.view.QuestionView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestionActivity extends AppCompatActivity implements QuestionContract.QuestionView, View.OnClickListener {
 
     private QuestionPresenterIml presenter;
 
     private QuestionView questionView;
+
+    private ExitDialog exitDialog;
+
+    private ExitDialog submitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +34,50 @@ public class QuestionActivity extends AppCompatActivity implements QuestionContr
         initView();
     }
 
+    private void initExitDialog() {
+        exitDialog = new ExitDialog(this, "直接退出将视作做错题处理，您确定退出？", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId() == R.id.commit_btn) {
+                    exitDialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.putExtra(Constant.ANSWER_CODE, QuestionView.FAIL);
+                    setResult(RESULT_OK, intent);
+                    QuestionActivity.this.finish();
+                }else {
+                    exitDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private void initSubmitDialog() {
+        submitDialog = new ExitDialog(this, "您确定提交题目？\n（答对获得一次下棋机会，答错惩罚30秒）", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId() == R.id.commit_btn) {
+                    submitDialog.dismiss();
+                    doCheckAnswer();
+                }else {
+                    submitDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitDialog.show();
+    }
+
     private void getQuestion() {
-        QuestionRequest request = new QuestionRequest();
-        request.setQuestionId(3);
-        presenter.doGetQuestion(request);
+        presenter.doGetQuestion();
     }
 
     @Override
     public void showQuestion(QuestionResponse response) {
         if(response.getStatus() == Constant.SUCCESS) {
             questionView.refreshView(response.getData());
-        }else {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -58,9 +85,20 @@ public class QuestionActivity extends AppCompatActivity implements QuestionContr
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.submit_btn:
-                questionView.checkAnswer();
+                submitDialog.show();
                 break;
         }
+    }
+
+    private void doCheckAnswer() {
+        int result = questionView.checkAnswer();
+        if(result == QuestionView.INVALID) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(Constant.ANSWER_CODE,result);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void initView() {
@@ -69,6 +107,14 @@ public class QuestionActivity extends AppCompatActivity implements QuestionContr
         questionView = new QuestionView(this);
         submitBtn.setOnClickListener(this);
         container.addView(questionView.getView());
+        //topbar
+        findViewById(R.id.back_btn).setVisibility(View.GONE);
+        findViewById(R.id.go_txt).setVisibility(View.GONE);
+        TextView title = findViewById(R.id.title_txt);
+        title.setText("题目");
+        //dialog
+        initExitDialog();
+        initSubmitDialog();
     }
 
     @Override

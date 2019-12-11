@@ -6,75 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".question.QuestionActivity">
 
-    <RelativeLayout
+    <include layout="@layout/include_top_bar"
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/colorTextBlack"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        />
 
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_action_name"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/colorWhite"
-            android:textSize="18dp"
-            android:text="第一题"
-            />
-
-        <ImageView
-            android:id="@+id/game_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_mine_normal"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            />
-
-    </RelativeLayout>
-    
     <LinearLayout
         android:id="@+id/question_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_above="@+id/bottom_bar"
+        android:layout_above="@+id/submit_btn"
         android:layout_below="@id/top_bar"
         />
 
-
-    <LinearLayout
-        android:id="@+id/bottom_bar"
+    <TextView
+        android:id="@+id/submit_btn"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/colorTextBlack"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:text="交卷"
+        android:textColor="@color/colorWhite"
+        android:textSize="16dp"
+        android:padding="10dp"
+        android:background="@color/colorTopBar"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        >
-        <TextView
-            android:id="@+id/submit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="交卷"
-            android:textColor="@color/colorAccent"
-            android:textSize="16dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            />
-
-    </LinearLayout>
-
+        />
 
 </RelativeLayout>

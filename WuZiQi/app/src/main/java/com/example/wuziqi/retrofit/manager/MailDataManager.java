@@ -6,7 +6,7 @@ import com.example.wuziqi.retrofit.HttpHandler;
 
 import io.reactivex.Observable;
 
-public class MailDataManager extends BaseDataManager<UserRequest, UserResponse> {
+public class MailDataManager extends BaseDataManager<UserResponse> {
 
     public MailDataManager(HttpHandler<UserResponse> handler) {
         super(handler);

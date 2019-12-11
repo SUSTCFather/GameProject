@@ -11,13 +11,21 @@ public class Constant {
 
     public static final String USER_DATA = "userData";
 
+    public static final String ENTER_DATA = "enterData";
+
+    public static final String ANSWER_CODE = "answer";
+
     public static final int WHITE = 0;
 
     public static final int BLACK = 1;
 
-    public static final String SOCKET_URL = "ws://192.168.1.101:8080/game/";
+    public static final int READY = 1;
 
-    public static final String BASE_URL = "http://192.168.1.101:8080";
+    public static final int STARTED = 2;
+
+    public static final String SOCKET_URL = "ws://192.168.1.102:8080/game/";
+
+    public static final String BASE_URL = "http://192.168.1.102:8080";//120.76.60.146
 
 
 }

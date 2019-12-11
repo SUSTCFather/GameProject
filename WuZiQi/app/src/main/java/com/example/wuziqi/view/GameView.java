@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.wuziqi.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.GameData;
+import com.example.wuziqi.view.listener.OnGameViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,6 @@ public class GameView extends View {
 
     //线条数量
     private static final int MAX_LINE = 10;
-
-    //胜利棋子数量
-    private static final int MAX_COUNT_IN_LINE = 5;
 
     //线条的宽度
     private int mPanelWidth;
@@ -51,13 +49,17 @@ public class GameView extends View {
     //白棋子
     private Bitmap mWhite;
 
-    //是否游戏结束
-    private boolean mIsGameOver;
+    //是否可以下棋
+    private boolean canClick;
+
+    private boolean isGameOver;
 
     //比例，棋子的大小是高的四分之三
     private float chessRatio = 0.75f;
 
     private GameData mGameData;
+
+    private OnGameViewListener listener;
 
     public GameView(Context context){
         this(context,null);
@@ -71,9 +73,12 @@ public class GameView extends View {
      */
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mGameData = new GameData();
         initPaint();
         initBitmap();
+    }
+
+    public void setListener(OnGameViewListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -169,17 +174,17 @@ public class GameView extends View {
      * @param canvas
      */
     private void drawPieces(Canvas canvas) {
+        if(mGameData != null) {
+            for(Point whitePoint : mGameData.getWhitePoints()) {
+                canvas.drawBitmap(mWhite, (whitePoint.x + (1 - chessRatio) / 2) * mLineHeight,
+                        (whitePoint.y + (1 - chessRatio) / 2) * mLineHeight, null);
+            }
 
-        for(Point whitePoint : mGameData.getWhiteArray()) {
-            canvas.drawBitmap(mWhite, (whitePoint.x + (1 - chessRatio) / 2) * mLineHeight,
-                    (whitePoint.y + (1 - chessRatio) / 2) * mLineHeight, null);
+            for(Point blackPoint : mGameData.getBlackPoints()) {
+                canvas.drawBitmap(mBlack, (blackPoint.x + (1 - chessRatio) / 2) * mLineHeight,
+                        (blackPoint.y + (1 - chessRatio) / 2) * mLineHeight, null);
+            }
         }
-
-        for(Point blackPoint : mGameData.getBlackArray()) {
-            canvas.drawBitmap(mBlack, (blackPoint.x + (1 - chessRatio) / 2) * mLineHeight,
-                    (blackPoint.y + (1 - chessRatio) / 2) * mLineHeight, null);
-        }
-
     }
 
     /**
@@ -209,6 +214,12 @@ public class GameView extends View {
 
     }
 
+    public void refreshView(GameData gameData) {
+        this.mGameData = gameData;
+        //刷新
+        invalidate();
+    }
+
     /**
      * 触摸事件
      *
@@ -219,7 +230,7 @@ public class GameView extends View {
     public boolean onTouchEvent(MotionEvent event) {
 
         //游戏结束的话不接收点击事件
-        if (mIsGameOver) {
+        if (!canClick || isGameOver) {
             return false;
         }
 
@@ -233,26 +244,18 @@ public class GameView extends View {
                 Point p = getValidPoint(x, y);
 
                 //判断当前这个点是否有棋子了
-                if (mGameData.containsPoint(p)) {
+                if (mGameData == null || mGameData.containsPoint(p)) {
                     return false;
                 }
-                Log.e(TAG,p.toString());
-                //判断如果是白子就存白棋集合，反之则黑棋集合
-                if (mGameData.getColor() == Constant.WHITE) {
-                    mGameData.getWhiteArray().add(p);
-                } else {
-                    mGameData.getBlackArray().add(p);
+
+                if (listener != null) {
+                    listener.onPointClick(p);
                 }
-
-                //刷新
-                invalidate();
-
                 break;
         }
 
        return true;
     }
-
 
     /**
      * 不能重复点击
@@ -265,15 +268,23 @@ public class GameView extends View {
         return new Point((int) (x / mLineHeight), (int) (y / mLineHeight));
     }
 
+    public void setCanClick(boolean canClick) {
+        this.canClick = canClick;
+    }
 
-//    /**
-//     * 再来一局
-//     */
-//    public void RestartGame() {
-//        mWhiteArray.clear();
-//        mBlackArray.clear();
-//        mIsGameOver = false;
-//        mIsWhiteWin = false;
-//        invalidate();
-//    }
+    public boolean isCanClick() {
+        return canClick;
+    }
+
+    public boolean isContainData() {
+        return mGameData != null;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
 }

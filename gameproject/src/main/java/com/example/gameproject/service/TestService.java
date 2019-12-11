@@ -43,31 +43,8 @@ public class TestService {
     }
 
 
-    public String addQuestion() {
-        Question question = new Question();
-        question.setContent("题目1");
-        questionRepository.save(question);
-        return "ok";
-    }
-
-    public Page<Question> getQuestion(long id) {
-        PageRequest pr = PageRequest.of(0, 10);
-        return questionRepository.findAll(pr);
-    }
-
-    public String addAnswer(int questionID){
-        Answer answer = new Answer();
-        Question question = questionRepository.findByQuestionId(questionID);
-        if(question != null) {
-            answer.setContent("湖人");
-            answer.setSymbol("A");
-            answer.setType(1);
-            answer.setQuestion(question);
-            answerRepository.save(answer);
-            return "ok";
-        }
-
-        return "shit";
+    public Question getQuestion() {
+        return questionRepository.findRand();
     }
 
 }

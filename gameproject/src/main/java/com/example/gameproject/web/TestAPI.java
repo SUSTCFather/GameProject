@@ -22,26 +22,11 @@ public class TestAPI {
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping("/addQuestion")
-    public String addQuestion() {
-        return testService.addQuestion();
+
+    @GetMapping("/getQuestion")
+    public Question getQuestion() {
+        return testService.getQuestion();
     }
-
-    @PostMapping("/addAnswer")
-    public String addAnswer(@RequestParam int questionID) {
-        return testService.addAnswer(questionID);
-    }
-
-    @PostMapping("/getUser")
-    public List<User> getUser(@RequestParam long userId) {
-        return testService.findUserById(userId);
-    }
-
-
-//    @PostMapping("/getQuestion")
-//    public Page<Question> getQuestion(@RequestParam int questionID) {
-//        return questionService.getQuestion(questionID);
-//    }
 
 
 

@@ -11,6 +11,8 @@ public class Answer {
 
     private int type;
 
+    private long questionId;
+
     public long getAnswerId() {
         return answerId;
     }
@@ -41,5 +43,13 @@ public class Answer {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(long questionId) {
+        this.questionId = questionId;
     }
 }

@@ -7,6 +7,8 @@ public class Player {
 
     private String userId;
 
+    private String userName;
+
     private List<Point> points;
 
     private boolean isWin;
@@ -41,5 +43,13 @@ public class Player {
 
     public void setWin(boolean win) {
         isWin = win;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

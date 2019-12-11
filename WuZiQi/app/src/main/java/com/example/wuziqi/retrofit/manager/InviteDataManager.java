@@ -7,7 +7,7 @@ import com.example.wuziqi.retrofit.HttpHandler;
 import io.reactivex.Observable;
 
 
-public class InviteDataManager extends BaseDataManager<InviteRequest, InviteResponse>{
+public class InviteDataManager extends BaseDataManager<InviteResponse>{
 
     public InviteDataManager(HttpHandler<InviteResponse> handler) {
         super(handler);

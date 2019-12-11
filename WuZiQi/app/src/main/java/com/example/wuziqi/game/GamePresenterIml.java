@@ -3,16 +3,47 @@ package com.example.wuziqi.game;
 import android.util.Log;
 
 import com.example.wuziqi.Constant;
+import com.example.wuziqi.bean.request.EnterRequest;
+import com.example.wuziqi.bean.response.EnterResponse;
+import com.example.wuziqi.bean.response.HallResponse;
+import com.example.wuziqi.retrofit.HttpHandler;
+import com.example.wuziqi.retrofit.manager.EnterDataManager;
+import com.example.wuziqi.retrofit.manager.HallDataManager;
 import com.example.wuziqi.websocket.GameWebSocketClient;
 import com.example.wuziqi.websocket.OnMessageHandler;
 
 import java.net.URI;
 
-public class GamePresenterIml implements GameContract.GamePresenter, OnMessageHandler {
+public class GamePresenterIml implements GameContract.GamePresenter{
 
     private GameContract.GameView mView;
 
-    private GameWebSocketClient client;
+    private EnterDataManager exitDataManager;
+
+    private HallDataManager hallDataManager;
+
+    private EnterDataManager readyDataManager;
+
+    public GamePresenterIml() {
+        this.exitDataManager = new EnterDataManager(new ExitHandler());
+        this.hallDataManager = new HallDataManager(new HallHandler());
+        this.readyDataManager = new EnterDataManager(new ReadyHandler());
+    }
+
+    @Override
+    public void doExit(EnterRequest request) {
+        exitDataManager.exitHall(request);
+    }
+
+    @Override
+    public void getHallInfo(int hallId) {
+        hallDataManager.getHall(hallId);
+    }
+
+    @Override
+    public void doReady(EnterRequest request) {
+        readyDataManager.ready(request);
+    }
 
     public void attachView(GameContract.GameView view) {
         this.mView = view;
@@ -22,39 +53,48 @@ public class GamePresenterIml implements GameContract.GamePresenter, OnMessageHa
         mView = null;
     }
 
-    @Override
-    public void openConnect(String userId) {
-        if(client != null) {
-            return;
-        }
-        URI uri = URI.create(Constant.SOCKET_URL + userId);
-        Log.e("fuck",uri.toString());
-        client = new GameWebSocketClient(uri);
-        client.setMessageHandler(this);
-        try {
-            client.connectBlocking();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void closeConnect() {
-        try {
-            if (null != client) {
-                client.close();
+    class ExitHandler implements HttpHandler<EnterResponse> {
+        @Override
+        public void onResultSuccess(EnterResponse response) {
+            if(mView != null) {
+                mView.showExit(response);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            client = null;
+        }
+
+        @Override
+        public void onResultError(Throwable e) {
+            Log.e("ExitHandler",e.toString());
         }
     }
 
-    @Override
-    public void onMessage(String message) {
-        if(mView != null) {
-            mView.showMessage(message);
+    class HallHandler implements HttpHandler<HallResponse> {
+        @Override
+        public void onResultSuccess(HallResponse response) {
+            if(mView != null) {
+                mView.showHallInfo(response);
+            }
+        }
+
+        @Override
+        public void onResultError(Throwable e) {
+
         }
     }
+
+    class ReadyHandler implements HttpHandler<EnterResponse> {
+        @Override
+        public void onResultSuccess(EnterResponse response) {
+            if(mView != null) {
+                mView.showReady(response);
+            }
+        }
+
+        @Override
+        public void onResultError(Throwable e) {
+
+        }
+    }
+
+
+
 }

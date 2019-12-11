@@ -10,27 +10,18 @@ import com.example.gameproject.bean.response.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 
 @RestController
 public class QuestionService {
 
     @Autowired
-    private AnswerRepository answerRepository;
-
-    @Autowired
     private QuestionRepository questionRepository;
 
-    public HttpResult getQuestion(QuestionRequest request) {
+    public HttpResult getQuestion() {
         HttpResult<Question> httpResult = new HttpResult<>();
-        Question question = questionRepository.findByQuestionId(request.getQuestionId());
-        if(question != null) {
-            httpResult.setStatus(Constant.SUCCESS);
-            httpResult.setData(question);
-        }else {
-            httpResult.setStatus(Constant.FAIL);
-            httpResult.setMessage("找不到题目，id: "+request.getQuestionId());
-        }
+        Question question = questionRepository.findRand();
+        httpResult.setStatus(Constant.SUCCESS);
+        httpResult.setData(question);
         return httpResult;
     }
 

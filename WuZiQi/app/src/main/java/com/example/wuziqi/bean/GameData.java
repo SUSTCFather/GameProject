@@ -3,46 +3,72 @@ package com.example.wuziqi.bean;
 import android.graphics.Point;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameData {
+    private int hallId;
 
-    private int color;
+    private GamePlayer blackPlayer;
 
-    private List<Point> whiteArray;
+    private GamePlayer whitePlayer;
 
-    private List<Point> blackArray;
+    private List<Point> blackPoints;
 
-    public GameData() {
-        whiteArray = new ArrayList<>();
-        blackArray = new ArrayList<>();
+    private List<Point> whitePoints;
+
+    private int winner;
+
+    public int getHallId() {
+        return hallId;
     }
 
-    public List<Point> getWhiteArray() {
-        return whiteArray;
+    public void setHallId(int hallId) {
+        this.hallId = hallId;
     }
 
-    public void setWhiteArray(List<Point> whiteArray) {
-        this.whiteArray = whiteArray;
+    public GamePlayer getBlackPlayer() {
+        return blackPlayer;
     }
 
-    public List<Point> getBlackArray() {
-        return blackArray;
+    public void setBlackPlayer(GamePlayer blackPlayer) {
+        this.blackPlayer = blackPlayer;
     }
 
-    public void setBlackArray(List<Point> blackArray) {
-        this.blackArray = blackArray;
+    public GamePlayer getWhitePlayer() {
+        return whitePlayer;
     }
 
-    public int getColor() {
-        return color;
+    public void setWhitePlayer(GamePlayer whitePlayer) {
+        this.whitePlayer = whitePlayer;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public List<Point> getBlackPoints() {
+        return blackPoints;
+    }
+
+    public void setBlackPoints(List<Point> blackPoints) {
+        this.blackPoints = blackPoints;
+    }
+
+    public List<Point> getWhitePoints() {
+        return whitePoints;
+    }
+
+    public void setWhitePoints(List<Point> whitePoints) {
+        this.whitePoints = whitePoints;
+    }
+
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setWinner(int winner) {
+        this.winner = winner;
     }
 
     public boolean containsPoint(Point point) {
-        return whiteArray.contains(point) || blackArray.contains(point);
+        return blackPoints.contains(point) || whitePoints.contains(point);
     }
 }

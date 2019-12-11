@@ -42,4 +42,9 @@ public class Point {
     public int hashCode() {
         return 10 * x + y;
     }
+
+    @Override
+    public String toString() {
+        return x+" "+y;
+    }
 }

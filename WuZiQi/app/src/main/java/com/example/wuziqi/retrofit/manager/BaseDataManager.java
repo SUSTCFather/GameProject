@@ -12,18 +12,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-//request response
-public abstract class BaseDataManager<T,R> implements Observer<R>{
+//response
+public abstract class BaseDataManager<T> implements Observer<T>{
     protected RetrofitService retrofitService;
 
-    private HttpHandler<R> httpHandler;
+    private HttpHandler<T> httpHandler;
 
-    public BaseDataManager(HttpHandler<R> handler) {
+    public BaseDataManager(HttpHandler<T> handler) {
         this.retrofitService = RetrofitHelper.getInstance().getServer();
         this.httpHandler = handler;
     }
 
-    protected void initObservable(Observable<R> observable) {
+    protected void initObservable(Observable<T> observable) {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
@@ -35,7 +35,7 @@ public abstract class BaseDataManager<T,R> implements Observer<R>{
     }
 
     @Override
-    public void onNext(R response) {
+    public void onNext(T response) {
         httpHandler.onResultSuccess(response);
     }
 

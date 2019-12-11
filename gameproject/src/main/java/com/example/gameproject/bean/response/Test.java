@@ -1,18 +1,25 @@
 package com.example.gameproject.bean.response;
 
 import com.alibaba.fastjson.JSON;
+import com.example.gameproject.api.UserRepository;
+import com.example.gameproject.socket.SocketData;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Test {
+
+    @Autowired
+    private UserRepository userRepository;
+
     public static void main(String[] args) {
-        GameData gameData = new GameData();
-        String s = JSON.toJSONString(gameData);
-        GameData g = JSON.parseObject(s,GameData.class);
-        System.out.println();
+        Test test = new Test();
+        test.userRepository.findAll();
+
 
     }
 }

@@ -2,7 +2,6 @@ package com.example.wuziqi.question;
 
 import android.util.Log;
 
-import com.example.wuziqi.bean.request.QuestionRequest;
 import com.example.wuziqi.bean.response.QuestionResponse;
 import com.example.wuziqi.retrofit.HttpHandler;
 import com.example.wuziqi.retrofit.manager.QuestionDataManager;
@@ -26,8 +25,8 @@ public class QuestionPresenterIml implements QuestionContract.QuestionPresenter{
     }
 
     @Override
-    public void doGetQuestion(QuestionRequest request) {
-        questionDataManager.getQuestion(request);
+    public void doGetQuestion() {
+        questionDataManager.getQuestion();
     }
 
     class QuestionHandler implements HttpHandler<QuestionResponse> {

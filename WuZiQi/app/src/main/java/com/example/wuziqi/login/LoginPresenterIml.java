@@ -40,7 +40,7 @@ public class LoginPresenterIml implements LoginContract.LoginPresenter{
 
         @Override
         public void onResultError(Throwable e) {
-            Log.e("fuck",e.toString());
+            Log.e("fuck",e.getMessage());
         }
     }
 

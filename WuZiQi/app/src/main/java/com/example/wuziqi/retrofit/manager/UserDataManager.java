@@ -7,7 +7,7 @@ import com.example.wuziqi.retrofit.HttpHandler;
 import io.reactivex.Observable;
 
 
-public class UserDataManager extends BaseDataManager<UserRequest, UserResponse>{
+public class UserDataManager extends BaseDataManager<UserResponse>{
 
     public UserDataManager(HttpHandler<UserResponse> handler) {
         super(handler);
