@@ -1,6 +1,7 @@
 package com.example.wuziqi.retrofit.manager;
 
 import com.example.wuziqi.bean.request.EnterRequest;
+import com.example.wuziqi.bean.request.PointRequest;
 import com.example.wuziqi.bean.response.EnterResponse;
 import com.example.wuziqi.bean.response.HallResponse;
 import com.example.wuziqi.retrofit.HttpHandler;
@@ -25,6 +26,11 @@ public class EnterDataManager extends BaseDataManager<EnterResponse>{
 
     public void ready(EnterRequest request) {
         Observable<EnterResponse> observable = retrofitService.ready(request);
+        initObservable(observable);
+    }
+
+    public void putChess(PointRequest request) {
+        Observable<EnterResponse> observable = retrofitService.putChess(request);
         initObservable(observable);
     }
 

@@ -4,20 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wuziqi.R;
-import com.example.wuziqi.bean.GameData;
 import com.example.wuziqi.bean.Hall;
+import com.example.wuziqi.view.GameHeadView;
 import com.example.wuziqi.view.listener.OnItemClickListener;
 import com.example.wuziqi.view.listener.OnViewClickListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,27 +60,13 @@ public class HallAdapter extends RecyclerView.Adapter<HallAdapter.HallViewHolder
         }
         lister.setPosition(position);
 
-        holder.whiteSeat.setOnClickListener(lister);
-        holder.blackSeat.setOnClickListener(lister);
-        //bindview
+        holder.whiteUser.setOnClickListener(lister);
+        holder.blackUser.setOnClickListener(lister);
+        //bindView
         Hall hall = dataList.get(position);
         holder.hallId.setText(String.format("- %d -",hall.getHallId()));
-        if(hall.getWhitePlayer() != null) {
-            holder.whiteHead.setImageResource(R.drawable.ic_head);
-            holder.whiteName.setText(hall.getWhitePlayer().getUserName());
-        }else {
-            holder.whiteHead.setImageResource(R.drawable.ic_mine_normal);
-            holder.whiteName.setText("");
-        }
-
-        if(hall.getBlackPlayer() != null) {
-            holder.blackHead.setImageResource(R.drawable.ic_head);
-            holder.blackName.setText(hall.getBlackPlayer().getUserName());
-        }else {
-            holder.blackHead.setImageResource(R.drawable.ic_mine_normal);
-            holder.blackName.setText("");
-        }
-
+        holder.whiteUser.refresh(hall.getWhitePlayer(),null);
+        holder.blackUser.refresh(hall.getBlackPlayer(),null);
     }
 
     @Override
@@ -94,23 +76,16 @@ public class HallAdapter extends RecyclerView.Adapter<HallAdapter.HallViewHolder
 
     class HallViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout whiteSeat;
-        TextView whiteName;
-        ImageView whiteHead;
-        LinearLayout blackSeat;
-        TextView blackName;
-        ImageView blackHead;
+        GameHeadView whiteUser;
+        GameHeadView blackUser;
         TextView hallId;
 
-        public HallViewHolder(@NonNull View itemView) {
+        HallViewHolder(@NonNull View itemView) {
             super(itemView);
-            whiteSeat = itemView.findViewById(R.id.white_seat);
-            whiteName = itemView.findViewById(R.id.white_name);
-            whiteHead = itemView.findViewById(R.id.white_head);
-            blackSeat = itemView.findViewById(R.id.black_seat);
-            blackName = itemView.findViewById(R.id.black_name);
-            blackHead = itemView.findViewById(R.id.black_head);
+            whiteUser = itemView.findViewById(R.id.white_user);
+            blackUser = itemView.findViewById(R.id.black_user);
             hallId = itemView.findViewById(R.id.hall_id);
         }
+
     }
 }

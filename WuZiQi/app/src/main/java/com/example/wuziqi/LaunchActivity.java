@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.wuziqi.login.LoginActivity;
 import com.example.wuziqi.main.MainActivity;
 import com.example.wuziqi.register.RegisterActivity;
+import com.example.wuziqi.util.Constant;
+import com.example.wuziqi.util.SharedUtil;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener {
 

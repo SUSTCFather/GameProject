@@ -4,26 +4,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.MyApplication;
 import com.example.wuziqi.R;
-import com.example.wuziqi.SharedUtil;
 import com.example.wuziqi.bean.GameData;
-import com.example.wuziqi.bean.GamePlayer;
 import com.example.wuziqi.bean.Hall;
-import com.example.wuziqi.bean.User;
 import com.example.wuziqi.bean.request.EnterRequest;
 import com.example.wuziqi.bean.request.PointRequest;
 import com.example.wuziqi.bean.response.EnterResponse;
@@ -31,15 +27,12 @@ import com.example.wuziqi.bean.response.GameDataResponse;
 import com.example.wuziqi.bean.response.HallResponse;
 import com.example.wuziqi.bean.response.HttpResult;
 import com.example.wuziqi.dialog.ExitDialog;
-import com.example.wuziqi.main.MainActivity;
 import com.example.wuziqi.question.QuestionActivity;
-import com.example.wuziqi.register.TimeCount;
+import com.example.wuziqi.view.GameHeadView;
 import com.example.wuziqi.view.GameView;
 import com.example.wuziqi.view.QuestionView;
 import com.example.wuziqi.view.listener.OnGameViewListener;
-import com.example.wuziqi.websocket.GameWebSocketClient;
 import com.example.wuziqi.websocket.OnMessageHandler;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -64,9 +57,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private ExitDialog questionDialog;
 
-    private View whiteUser;
+    private GameHeadView whiteUser;
 
-    private View blackUser;
+    private GameHeadView blackUser;
 
     private Button questionBtn;
 
@@ -156,6 +149,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    public void putChessSuccess(EnterResponse response) {
+        if(!game.isGameOver()) {
+            hint.setText("先通过做题来获得下棋机会");
+        }
+    }
+
+    @Override
+    public void putChessError(String reason) {
+        game.setCanClick(true);
+        hint.setText("下棋失败: "+reason+"，请重试");
+    }
+
     /**
      * 棋盘点击回调
      * @param point
@@ -163,12 +169,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onPointClick(Point point) {
         PointRequest request = new PointRequest(nowUser,point);
-        boolean haveSend = MyApplication.sendMessage(JSON.toJSONString(request));
-        //发送成功不给发了
-        if(haveSend) {
-            hint.setText("先通过做题来获得下棋机会");
-            game.setCanClick(false);
-        }
+        presenter.putChess(request);
+        game.setCanClick(false);
     }
 
     /**
@@ -179,8 +181,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void showHallInfo(HallResponse response) {
         if(response.getStatus() == Constant.SUCCESS) {
             Hall hall = response.getData().get(0);
-            initUserView(whiteUser, hall.getWhitePlayer());
-            initUserView(blackUser, hall.getBlackPlayer());
+            whiteUser.refresh(hall.getWhitePlayer(),nowUser.getPlayer().getUserId());
+            blackUser.refresh(hall.getBlackPlayer(),nowUser.getPlayer().getUserId());
         }
     }
 
@@ -210,25 +212,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void initUserView(View view, GamePlayer gamePlayer) {
-        ImageView head = view.findViewById(R.id.game_head);
-        TextView name = view.findViewById(R.id.game_name);
-        ImageView hand = view.findViewById(R.id.hand);
-        if(gamePlayer != null) {
-            head.setImageResource(R.drawable.ic_head);
-            name.setText(gamePlayer.getUserName());
-            if(gamePlayer.getType() == Constant.READY) {
-                hand.setVisibility(View.VISIBLE);
-            }else {
-                hand.setVisibility(View.INVISIBLE);
-            }
-        }else {
-            head.setImageResource(R.drawable.ic_mine_normal);
-            name.setText("");
-            hand.setVisibility(View.INVISIBLE);
-        }
-    }
-
     @Override
     protected void onResume() {
         Log.e(TAG,"onResume");
@@ -250,8 +233,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             HallResponse responseHall = JSON.parseObject(message,HallResponse.class);
             List<Hall> halls = responseHall.getData();
             Hall hall = halls.get(nowUser.getHallId()-1);
-            initUserView(whiteUser, hall.getWhitePlayer());
-            initUserView(blackUser, hall.getBlackPlayer());
+            whiteUser.refresh(hall.getWhitePlayer(),nowUser.getPlayer().getUserId());
+            blackUser.refresh(hall.getBlackPlayer(),nowUser.getPlayer().getUserId());
         } else if(result.getMessage().equals("GameData")) {
             startFirstTimer();
             GameDataResponse dataResponse = JSON.parseObject(message,GameDataResponse.class);
@@ -271,6 +254,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             winnerDialog.setText(String.format("%s获得胜利",data.getBlackPlayer().getUserName()));
         }
         winnerDialog.show();
+        nowUser.getPlayer().setType(0);
         game.setGameOver(true);
         resetGame();
     }
@@ -285,8 +269,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startFirstTimer() {
-        Log.i(TAG,"startFirstTimer "+game.isContainData());
         if(!game.isContainData()) {
+            nowUser.getPlayer().setType(Constant.STARTED);
             hint.setText("先通过做题来获得下棋机会");
             GameCounter timeCount = new GameCounter(6 * 1000, 1000);
             timeCount.start();

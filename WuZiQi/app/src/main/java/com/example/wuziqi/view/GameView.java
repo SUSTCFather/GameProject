@@ -7,21 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.wuziqi.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.GameData;
 import com.example.wuziqi.view.listener.OnGameViewListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 游戏主类

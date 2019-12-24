@@ -25,8 +25,14 @@ public class SocketData {
      */
     private static ConcurrentHashMap<String, GameController> sessionMap = new ConcurrentHashMap<>();
 
+    /**
+     * 房间列表
+     */
     public static List<Hall> hallList = new CopyOnWriteArrayList<>();
 
+    /**
+     * 游戏数据
+     */
     private static ConcurrentHashMap<Integer, GameData> gameDataMap = new ConcurrentHashMap<>();
 
     static {
@@ -35,19 +41,36 @@ public class SocketData {
         }
     }
 
+    /**
+     * 放置用户，id与session对应
+     * @param userId
+     * @param gameController
+     */
     public static void putUser(String userId, GameController gameController) {
         sessionMap.put(userId, gameController);
     }
 
+    /**
+     * 移除用户
+     * @param userId
+     */
     public static void removeUser(String userId) {
         sessionMap.remove(userId);
     }
 
+    /**
+     * 获取在线用户数量
+     * @return
+     */
     public static int getSessionSize() {
         return sessionMap.size();
     }
 
-    public static void enter(EnterRequest request) {
+    /**
+     * 进入房间
+     * @param request
+     */
+    public static synchronized void enter(EnterRequest request) {
         Hall real = hallList.get(request.getHallId()-1);
         if(request.getColor() == Constant.BLACK) {
             real.setBlackPlayer(request.getPlayer());
@@ -57,8 +80,28 @@ public class SocketData {
         broadcastHallData();
     }
 
-    public static void exit(EnterRequest request) {
+    /**
+     * 退出房间
+     * @param request
+     */
+    public static synchronized void exit(EnterRequest request) throws IOException {
         Hall real = hallList.get(request.getHallId()-1);
+        if(request.getPlayer().getType() == Constant.STARTED) {
+            System.out.println(request.getPlayer().getUserName()+"逃跑");
+            GameData gameData = gameDataMap.get(real.getHallId());
+            if(request.getColor() == Constant.BLACK) {
+                gameData.setWinner(Constant.WHITE);
+            }else {
+                gameData.setWinner(Constant.BLACK);
+            }
+            real.getBlackPlayer().setType(0);
+            real.getWhitePlayer().setType(0);
+            gameDataMap.remove(real.getHallId());
+            sessionMap.get(real.getBlackPlayer().getUserId()).setStart(false);
+            sessionMap.get(real.getWhitePlayer().getUserId()).setStart(false);
+            sendGameData(gameData, real);
+        }
+
         if(request.getColor() == Constant.BLACK) {
             real.setBlackPlayer(null);
         }else {
@@ -67,18 +110,28 @@ public class SocketData {
         broadcastHallData();
     }
 
-    public static void ready(EnterRequest request) throws IOException {
+    /**
+     * 准备开始
+     * @param request
+     * @throws IOException
+     */
+    public static synchronized void ready(EnterRequest request) throws IOException {
         Hall real = hallList.get(request.getHallId()-1);
         if(request.getColor() == Constant.BLACK) {
             real.setBlackPlayer(request.getPlayer());
         }else {
             real.setWhitePlayer(request.getPlayer());
         }
-        broadcastHallData(real);
+        broadcastHallData();
         initGameData(real);
     }
 
-    public static void updatePoint(PointRequest request) throws IOException {
+    /**
+     * 更新游戏数据
+     * @param request
+     * @throws IOException
+     */
+    public static synchronized GameData updatePoint(PointRequest request) throws IOException {
         int hallId = request.getUser().getHallId();
         Hall hall = hallList.get(hallId - 1);
         GameData gameData = gameDataMap.get(hallId);
@@ -88,12 +141,20 @@ public class SocketData {
         if(gameData.getWinner() != -1){
             hall.getBlackPlayer().setType(0);
             hall.getWhitePlayer().setType(0);
-            //todo 保存状态？
-           // gameDataMap.remove(hall.getHallId());
+            gameDataMap.remove(hall.getHallId());
+            sessionMap.get(hall.getBlackPlayer().getUserId()).setStart(false);
+            sessionMap.get(hall.getWhitePlayer().getUserId()).setStart(false);
         }
         sendGameData(gameData,hall);
+        return gameData;
     }
 
+    /**
+     * 房间内游戏数据同步
+     * @param gameData
+     * @param hall
+     * @throws IOException
+     */
     private static void sendGameData(GameData gameData, Hall hall) throws IOException {
         GamePlayer white = hall.getWhitePlayer();
         GamePlayer black = hall.getBlackPlayer();
@@ -106,7 +167,7 @@ public class SocketData {
     }
 
     /**
-     * 广播gameData;
+     * 初始化游戏数据;
      * @param hall
      */
     private static void initGameData(Hall hall) throws IOException {
@@ -114,27 +175,15 @@ public class SocketData {
         GamePlayer black = hall.getBlackPlayer();
         if(white != null && black != null
                 && white.getType() == Constant.READY && black.getType() == Constant.READY) {
+            black.setType(Constant.STARTED);
+            white.setType(Constant.STARTED);
             GameData gameData = new GameData(hall.getHallId());
             gameData.setBlackPlayer(black);
             gameData.setWhitePlayer(white);
             gameDataMap.put(hall.getHallId(),gameData);
+            sessionMap.get(white.getUserId()).setStart(true);
+            sessionMap.get(black.getUserId()).setStart(true);
             sendGameData(gameData,hall);
-        }
-    }
-
-    /**
-     * 房内广播房间信息
-     * @param hall
-     */
-    private static void broadcastHallData(Hall hall) throws IOException {
-        String data = getHallListData();
-        GamePlayer white = hall.getWhitePlayer();
-        GamePlayer black = hall.getBlackPlayer();
-        if(white != null) {
-            sessionMap.get(white.getUserId()).getSession().getBasicRemote().sendText(data);
-        }
-        if(black != null) {
-            sessionMap.get(black.getUserId()).getSession().getBasicRemote().sendText(data);
         }
     }
 
@@ -145,7 +194,10 @@ public class SocketData {
         String data = getHallListData();
         for(String key : sessionMap.keySet()) {
             try {
-                sessionMap.get(key).getSession().getBasicRemote().sendText(data);
+                GameController controller = sessionMap.get(key);
+                if(!controller.isStart()) {
+                    controller.getSession().getBasicRemote().sendText(data);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

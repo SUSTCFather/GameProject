@@ -2,17 +2,13 @@ package com.example.wuziqi.game;
 
 import android.util.Log;
 
-import com.example.wuziqi.Constant;
 import com.example.wuziqi.bean.request.EnterRequest;
+import com.example.wuziqi.bean.request.PointRequest;
 import com.example.wuziqi.bean.response.EnterResponse;
 import com.example.wuziqi.bean.response.HallResponse;
 import com.example.wuziqi.retrofit.HttpHandler;
 import com.example.wuziqi.retrofit.manager.EnterDataManager;
 import com.example.wuziqi.retrofit.manager.HallDataManager;
-import com.example.wuziqi.websocket.GameWebSocketClient;
-import com.example.wuziqi.websocket.OnMessageHandler;
-
-import java.net.URI;
 
 public class GamePresenterIml implements GameContract.GamePresenter{
 
@@ -24,10 +20,13 @@ public class GamePresenterIml implements GameContract.GamePresenter{
 
     private EnterDataManager readyDataManager;
 
+    private EnterDataManager putChessDataManager;
+
     public GamePresenterIml() {
         this.exitDataManager = new EnterDataManager(new ExitHandler());
         this.hallDataManager = new HallDataManager(new HallHandler());
         this.readyDataManager = new EnterDataManager(new ReadyHandler());
+        this.putChessDataManager = new EnterDataManager(new PutChessHandler());
     }
 
     @Override
@@ -43,6 +42,11 @@ public class GamePresenterIml implements GameContract.GamePresenter{
     @Override
     public void doReady(EnterRequest request) {
         readyDataManager.ready(request);
+    }
+
+    @Override
+    public void putChess(PointRequest request) {
+        putChessDataManager.putChess(request);
     }
 
     public void attachView(GameContract.GameView view) {
@@ -95,6 +99,20 @@ public class GamePresenterIml implements GameContract.GamePresenter{
         }
     }
 
+    class PutChessHandler implements HttpHandler<EnterResponse> {
+        @Override
+        public void onResultSuccess(EnterResponse response) {
+            if(mView != null) {
+                mView.putChessSuccess(response);
+            }
+        }
 
+        @Override
+        public void onResultError(Throwable e) {
+            if(mView != null) {
+                mView.putChessError(e.getMessage());
+            }
+        }
+    }
 
 }

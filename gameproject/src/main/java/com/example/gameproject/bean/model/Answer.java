@@ -1,6 +1,7 @@
 package com.example.gameproject.bean.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -17,7 +18,7 @@ public class Answer {
 
     private int type;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Question question; // 问题外键
 

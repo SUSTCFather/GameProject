@@ -28,4 +28,9 @@ public class UserDataManager extends BaseDataManager<UserResponse>{
         initObservable(observable);
     }
 
+    public void getPersonalInfo(long userId) {
+        Observable<UserResponse> observable = retrofitService.getPersonalInfo(userId);
+        initObservable(observable);
+    }
+
 }

@@ -1,8 +1,13 @@
 package com.example.wuziqi;
 
+import android.app.Activity;
 import android.app.Application;
-import android.util.Log;
+import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.websocket.GameWebSocketClient;
 import com.example.wuziqi.websocket.OnMessageHandler;
 
@@ -12,6 +17,48 @@ import java.net.URI;
 public class MyApplication extends Application {
 
     private static GameWebSocketClient client;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
+                ActivityManager.getInstance().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                ActivityManager.getInstance().removeActivity(activity);
+            }
+        });
+
+    }
 
     public static void initClient(String userId) {
         if(client != null) {
@@ -27,14 +74,6 @@ public class MyApplication extends Application {
         if(client.isClosed()) {
             client.reconnect();
         }
-    }
-
-    public static boolean sendMessage(String message) {
-        if(client.isOpen()) {
-            client.send(message);
-            return true;
-        }
-        return false;
     }
 
     public static void setMessageHandler(OnMessageHandler handler) {

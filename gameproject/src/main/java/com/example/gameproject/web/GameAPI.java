@@ -1,20 +1,16 @@
 package com.example.gameproject.web;
 
-import com.alibaba.fastjson.JSON;
 import com.example.gameproject.Constant;
-import com.example.gameproject.bean.model.User;
 import com.example.gameproject.bean.request.EnterRequest;
-import com.example.gameproject.bean.request.InviteRequest;
-import com.example.gameproject.bean.request.UserRequest;
+import com.example.gameproject.bean.request.PointRequest;
 import com.example.gameproject.bean.response.GameData;
 import com.example.gameproject.bean.response.Hall;
 import com.example.gameproject.bean.response.HttpResult;
-import com.example.gameproject.service.UserService;
+import com.example.gameproject.service.GameService;
 import com.example.gameproject.socket.SocketData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +20,7 @@ import java.util.List;
 public class GameAPI {
 
     @Autowired
-    private UserService userService;
+    private GameService gameService;
 
     @GetMapping("/getHallList")
     public HttpResult getHall() {
@@ -63,7 +59,7 @@ public class GameAPI {
     }
 
     @PostMapping("/exit")
-    public HttpResult exit(@RequestBody EnterRequest request) {
+    public HttpResult exit(@RequestBody EnterRequest request) throws IOException {
         SocketData.exit(request);
         HttpResult result = new HttpResult<>();
         System.out.printf("%s退出%d号房间\n",request.getPlayer().getUserName(),request.getHallId());
@@ -77,6 +73,18 @@ public class GameAPI {
         SocketData.ready(request);
         HttpResult result = new HttpResult<>();
         System.out.printf("%s做好准备了\n",request.getPlayer().getUserName());
+        result.setStatus(Constant.SUCCESS);
+        return result;
+    }
+
+    @PostMapping("/chess")
+    public HttpResult putChess(@RequestBody PointRequest request) throws IOException {
+        HttpResult result = new HttpResult<>();
+        GameData gameData = SocketData.updatePoint(request);
+        //胜利后的操作
+        if(gameData.getWinner() != -1){
+            gameService.saveGameRecord(gameData);
+        }
         result.setStatus(Constant.SUCCESS);
         return result;
     }

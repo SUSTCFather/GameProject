@@ -10,9 +10,10 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorGray">#645C5C</color>
 
-    <color name="colorDiv">#E5E5E5</color>
+    <color name="colorDiv">#A0A0A0</color>
     <color name="colorNav">#8D7A71</color>
-    <color name="colorYellow">#FFC800</color>
+    <color name="colorGreen">#009900</color>
+    <color name="colorGold">#FF8000</color>
     <color name="colorBlue">#1E90FF</color>
 
     <color name="colorMineBg">#E8EDF3</color>

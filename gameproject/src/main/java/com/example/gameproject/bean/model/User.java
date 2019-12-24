@@ -1,6 +1,8 @@
 package com.example.gameproject.bean.model;
 
+import com.example.gameproject.Constant;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,19 +20,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
     private String userName;
+
+    @JsonIgnore
     private String password;
     private String mailAddress;
+    private int winNum;
+    private int loseNum;
+    private int score;
 
-    @JsonBackReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
-    private List<Relationship> followUsers;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "winner")
+    private List<GameRecord> winGames;
 
-    @JsonBackReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
-    private List<Relationship> followers;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "loser")
+    private List<GameRecord> loseGames;
 
-    public User(){
+    public User() {
 
+    }
+
+    public User(long id) {
+        this.userId = id;
     }
 
     public long getUserId() {
@@ -65,19 +76,53 @@ public class User {
         this.mailAddress = mailAddress;
     }
 
-    public List<Relationship> getFollowUsers() {
-        return followUsers;
+    public List<GameRecord> getWinGames() {
+        return winGames;
     }
 
-    public void setFollowUsers(List<Relationship> followUsers) {
-        this.followUsers = followUsers;
+    public void setWinGames(List<GameRecord> winGames) {
+        this.winGames = winGames;
     }
 
-    public List<Relationship> getFollowers() {
-        return followers;
+    public List<GameRecord> getLoseGames() {
+        return loseGames;
     }
 
-    public void setFollowers(List<Relationship> followers) {
-        this.followers = followers;
+    public void setLoseGames(List<GameRecord> loseGames) {
+        this.loseGames = loseGames;
+    }
+
+    public int getWinNum() {
+        return winNum;
+    }
+
+    public void setWinNum(int winNum) {
+        this.winNum = winNum;
+    }
+
+    public int getLoseNum() {
+        return loseNum;
+    }
+
+    public void setLoseNum(int loseNum) {
+        this.loseNum = loseNum;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void lostGame() {
+        this.loseNum++;
+        this.score += Constant.LOSE_POINT;
+    }
+
+    public void winGame() {
+        this.winNum++;
+        this.score += Constant.WIN_POINT;
     }
 }

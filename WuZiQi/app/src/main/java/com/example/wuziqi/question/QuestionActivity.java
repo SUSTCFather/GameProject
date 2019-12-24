@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.response.QuestionResponse;
 import com.example.wuziqi.dialog.ExitDialog;
@@ -52,7 +52,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionContr
     }
 
     private void initSubmitDialog() {
-        submitDialog = new ExitDialog(this, "您确定提交题目？\n（答对获得一次下棋机会，答错惩罚30秒）", new View.OnClickListener() {
+        submitDialog = new ExitDialog(this, "您确定提交题目？\n（答对获得一次下棋机会，答错惩罚15秒）", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view.getId() == R.id.commit_btn) {

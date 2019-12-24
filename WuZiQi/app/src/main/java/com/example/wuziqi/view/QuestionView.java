@@ -8,7 +8,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wuziqi.AnswerItemAdapter;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.Answer;
 import com.example.wuziqi.bean.Question;

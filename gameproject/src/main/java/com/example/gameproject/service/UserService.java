@@ -1,27 +1,24 @@
 package com.example.gameproject.service;
 
 import com.example.gameproject.Constant;
-import com.example.gameproject.api.RelationRepository;
-import com.example.gameproject.api.UserRepository;
-import com.example.gameproject.bean.model.Relationship;
+import com.example.gameproject.mapper.UserRepository;
+import com.example.gameproject.bean.model.GameRecord;
 import com.example.gameproject.bean.request.FriendRequest;
 import com.example.gameproject.bean.request.UserRequest;
 import com.example.gameproject.bean.response.HttpResult;
 import com.example.gameproject.bean.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RelationRepository relationRepository;
 
     /**
      * 注册
@@ -92,81 +89,64 @@ public class UserService {
     }
 
     /**
-     * 添加好友
-     * @param request
+     * 获取个人信息
+     * @param userId
      * @return
      */
-    public HttpResult addFriend(FriendRequest request) {
-        HttpResult<List<User>> httpResult = new HttpResult<>();
-        User fromUser = userRepository.findByUserName(request.getFromUserName());
-        User toUser = userRepository.findByUserName(request.getToUserName());
-        if(fromUser.getUserId() == toUser.getUserId()) {
-            httpResult.setStatus(Constant.FAIL);
-            httpResult.setMessage("不能添加自己为好友");
-            return httpResult;
+    public HttpResult getPersonInfo(long userId) {
+        HttpResult<User> result = new HttpResult<>();
+        User user = userRepository.findByUserId(userId);
+        if(user != null) {
+            result.setStatus(Constant.SUCCESS);
+            result.setData(user);
+        }else {
+            result.setStatus(Constant.FAIL);
+            result.setMessage("id错误");
         }
-        if(toUser == null || fromUser == null) {
-            httpResult.setStatus(Constant.FAIL);
-            httpResult.setMessage("查无此人");
-            return httpResult;
-        }
-        //查重
-        List<User> friendList = getFriendList(fromUser);
-        boolean isContainFriend = isContainFriend(friendList, toUser);
-        if(isContainFriend) {
-            httpResult.setStatus(Constant.FAIL);
-            httpResult.setMessage("你们已经是好友");
-            return httpResult;
-        }
-        List<User> list = new ArrayList<>();
-        list.add(toUser);
-        //添加
-        Relationship relationship = new Relationship();
-        relationship.setFromUser(fromUser);
-        relationship.setToUser(toUser);
-        relationRepository.save(relationship);
-        httpResult.setStatus(Constant.SUCCESS);
-        httpResult.setMessage("添加好友成功");
-        httpResult.setData(list);
-        return httpResult;
-    }
-
-    public HttpResult getFriends(FriendRequest request) {
-        HttpResult<List<User>> httpResult = new HttpResult<>();
-        User fromUser = userRepository.findByUserName(request.getFromUserName());
-        httpResult.setStatus(Constant.SUCCESS);
-        httpResult.setData(getFriendList(fromUser));
-        httpResult.setMessage("好友列表加载完成");
-        return httpResult;
-    }
-
-    private boolean isContainFriend(List<User> friendList, User toUser) {
-        for(User user : friendList) {
-            if(user.getUserId() == toUser.getUserId()) {
-                return true;
-            }
-        }
-        return false;
+        return result;
     }
 
     /**
-     * 寻找该用户的好友列表
-     * @param fromUser
+     * 获取用户历史战绩
+     * @param id
      * @return
      */
-    private List<User> getFriendList(User fromUser) {
-        List<User> friendList = new ArrayList<>();
-        List<Relationship> followers = fromUser.getFollowers(); //fromUser
-        for(Relationship relationship : followers) {
-            friendList.add(relationship.getFromUser());
+    public HttpResult getHistory(Long id) {
+        HttpResult<List<GameRecord>> result = new HttpResult<>();
+        User user = userRepository.findByUserId(id);
+        if(user == null) {
+            result.setStatus(Constant.FAIL);
+            result.setMessage("id错误");
+            return result;
         }
-        List<Relationship> followUsers = fromUser.getFollowUsers(); //toUser
-        for(Relationship relationship : followUsers) {
-            friendList.add(relationship.getToUser());
-        }
-        return friendList;
+        List<GameRecord> recordList = new LinkedList<>();
+        recordList.addAll(user.getLoseGames());
+        recordList.addAll(user.getWinGames());
+        Collections.sort(recordList, new Comparator<GameRecord>() {
+            @Override
+            public int compare(GameRecord o1, GameRecord o2) {
+                return -o1.getGameTime().compareTo(o2.getGameTime());
+            }
+        });
+
+
+        result.setStatus(Constant.SUCCESS);
+        result.setData(recordList);
+        return result;
     }
 
+    /**
+     * 获取排行榜
+     * @return
+     */
+    public HttpResult getRankList() {
+        HttpResult<List<User>> result = new HttpResult<>();
+        Sort sort = new Sort(Sort.Direction.DESC, "score");
+        PageRequest pageRequest = PageRequest.of(0,15,sort);
+        result.setData(userRepository.findAllBy(pageRequest));
+        result.setStatus(Constant.SUCCESS);
+        return result;
+    }
 
     /**
      * 通过用户名或邮箱寻找用户
@@ -193,10 +173,6 @@ public class UserService {
             return result.get(0);
         }
         return null;
-    }
-
-    public User findUserById(Long id) {
-        return userRepository.findByUserId(id);
     }
 
 }

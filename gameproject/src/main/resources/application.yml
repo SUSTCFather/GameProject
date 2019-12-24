@@ -4,11 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/game?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/game?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
     username: root
     password: 12345678
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  jackson:
+    time-zone: Hongkong
 

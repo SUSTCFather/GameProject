@@ -1,6 +1,6 @@
 package com.example.wuziqi.retrofit;
 
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.google.gson.GsonBuilder;
 
 import retrofit2.Retrofit;

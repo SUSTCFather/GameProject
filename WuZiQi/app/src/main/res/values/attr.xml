@@ -4,4 +4,11 @@
         <attr name="option_text" format="string" />
         <attr name="content_text" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="GameHeadView">
+        <attr name="location">
+            <enum name="left" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

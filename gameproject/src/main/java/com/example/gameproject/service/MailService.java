@@ -2,7 +2,7 @@ package com.example.gameproject.service;
 
 import com.example.gameproject.Constant;
 import com.example.gameproject.SendMail;
-import com.example.gameproject.api.MailRepository;
+import com.example.gameproject.mapper.MailRepository;
 import com.example.gameproject.bean.model.Mail;
 import com.example.gameproject.bean.request.UserRequest;
 import com.example.gameproject.bean.response.HttpResult;

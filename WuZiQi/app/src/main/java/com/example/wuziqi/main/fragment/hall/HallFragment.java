@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.R;
-import com.example.wuziqi.SharedUtil;
+import com.example.wuziqi.util.SharedUtil;
 import com.example.wuziqi.bean.GamePlayer;
 import com.example.wuziqi.bean.Hall;
 import com.example.wuziqi.bean.User;
@@ -115,10 +115,10 @@ public class HallFragment extends Fragment implements OnItemClickListener, HallC
     @Override
     public void onItemClick(View view, int position) {
         switch (view.getId()){
-            case R.id.black_seat:
+            case R.id.black_user:
                 doClickBlack(position);
                 break;
-            case R.id.white_seat:
+            case R.id.white_user:
                 doClickWhite(position);
                 break;
         }

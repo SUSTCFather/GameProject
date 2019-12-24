@@ -13,9 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.ActivityManager;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.R;
-import com.example.wuziqi.SharedUtil;
+import com.example.wuziqi.util.SharedUtil;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;
 import com.example.wuziqi.forget.ForgetActivity;
@@ -81,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedUtil.getInstance(this).writeShared(Constant.USER_DATA,JSON.toJSONString(loginResponse.getData()));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            ActivityManager.getInstance().finishAllActivity();
         }
 
     }

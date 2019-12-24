@@ -9,17 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.MyApplication;
 import com.example.wuziqi.R;
-import com.example.wuziqi.SharedUtil;
-import com.example.wuziqi.bean.Hall;
+import com.example.wuziqi.util.SharedUtil;
 import com.example.wuziqi.bean.User;
 import com.example.wuziqi.bean.response.HallResponse;
 import com.example.wuziqi.bean.response.HttpResult;
 import com.example.wuziqi.main.fragment.hall.HallFragment;
 import com.example.wuziqi.main.fragment.MineFragment;
-import com.example.wuziqi.websocket.GameWebSocketClient;
 import com.example.wuziqi.websocket.OnMessageHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

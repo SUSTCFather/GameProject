@@ -2,11 +2,9 @@ package com.example.wuziqi.main.fragment.hall;
 
 import android.util.Log;
 
-import com.example.wuziqi.bean.Hall;
 import com.example.wuziqi.bean.request.EnterRequest;
 import com.example.wuziqi.bean.response.EnterResponse;
 import com.example.wuziqi.bean.response.HallResponse;
-import com.example.wuziqi.bean.response.InviteResponse;
 import com.example.wuziqi.retrofit.HttpHandler;
 import com.example.wuziqi.retrofit.manager.EnterDataManager;
 import com.example.wuziqi.retrofit.manager.HallDataManager;

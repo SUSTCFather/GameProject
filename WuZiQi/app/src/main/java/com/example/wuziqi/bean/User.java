@@ -9,12 +9,10 @@ public class User {
 
     private long userId;
     private String userName;
-    private String password;
     private String mailAddress;
-
-    public User(){
-
-    }
+    private int winNum;
+    private int loseNum;
+    private int score;
 
     public long getUserId() {
         return userId;
@@ -32,19 +30,35 @@ public class User {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getMailAddress() {
         return mailAddress;
     }
 
     public void setMailAddress(String mailAddress) {
         this.mailAddress = mailAddress;
+    }
+
+    public int getWinNum() {
+        return winNum;
+    }
+
+    public void setWinNum(int winNum) {
+        this.winNum = winNum;
+    }
+
+    public int getLoseNum() {
+        return loseNum;
+    }
+
+    public void setLoseNum(int loseNum) {
+        this.loseNum = loseNum;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

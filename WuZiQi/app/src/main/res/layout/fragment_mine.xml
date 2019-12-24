@@ -58,6 +58,7 @@
             >
             <RelativeLayout
                 android:id="@+id/setPassword"
+                android:foreground="?attr/selectableItemBackground"
                 style="@style/SettingItemStyle">
 
                 <TextView
@@ -77,6 +78,7 @@
 
             <RelativeLayout
                 android:id="@+id/history"
+                android:foreground="?attr/selectableItemBackground"
                 style="@style/SettingItemStyle">
 
                 <TextView
@@ -96,6 +98,7 @@
 
             <RelativeLayout
                 android:id="@+id/rank_list"
+                android:foreground="?attr/selectableItemBackground"
                 style="@style/SettingItemStyle">
 
                 <TextView
@@ -127,6 +130,7 @@
             >
             <RelativeLayout
                 android:id="@+id/about"
+                android:foreground="?attr/selectableItemBackground"
                 style="@style/SettingItemStyle">
 
                 <TextView

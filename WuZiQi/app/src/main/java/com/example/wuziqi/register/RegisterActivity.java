@@ -11,8 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.R;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.UserResponse;

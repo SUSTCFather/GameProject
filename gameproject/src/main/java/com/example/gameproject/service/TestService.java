@@ -1,19 +1,18 @@
 package com.example.gameproject.service;
 
-import com.example.gameproject.api.AnswerRepository;
-import com.example.gameproject.api.MailRepository;
-import com.example.gameproject.api.QuestionRepository;
-import com.example.gameproject.api.UserRepository;
-import com.example.gameproject.bean.model.Answer;
+import com.example.gameproject.mapper.AnswerRepository;
+import com.example.gameproject.mapper.GameRecordRepository;
+import com.example.gameproject.mapper.QuestionRepository;
+import com.example.gameproject.mapper.UserRepository;
 import com.example.gameproject.bean.model.Question;
-import com.example.gameproject.bean.model.Relationship;
+import com.example.gameproject.bean.model.GameRecord;
 import com.example.gameproject.bean.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,23 +27,21 @@ public class TestService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> findUserById(Long id) {
-        User user = userRepository.findByUserId(id);
-        List<User> userList = new ArrayList<>();
-        List<Relationship> followers = user.getFollowers(); //fromUser
-        for(Relationship relationship : followers) {
-            userList.add(relationship.getFromUser());
-        }
-        List<Relationship> followUsers = user.getFollowUsers(); //toUser
-        for(Relationship relationship : followUsers) {
-            userList.add(relationship.getToUser());
-        }
-        return userList;
+    @Autowired
+    private GameRecordRepository gameRecordRepository;
+
+    public void testAddGameRecord() {
+        GameRecord gameRecord = new GameRecord();
+        gameRecord.setWinner(new User(1));
+        gameRecord.setLoser(new User(2));
+        gameRecord.setGameTime(new Date());
+        gameRecordRepository.save(gameRecord);
     }
 
-
-    public Question getQuestion() {
-        return questionRepository.findRand();
+    public List<User> testGetAll() {
+        Sort sort = new Sort(Sort.Direction.DESC, "score");
+        PageRequest pageRequest = PageRequest.of(0,15,sort);
+        return userRepository.findAllBy(pageRequest);
     }
 
 }

@@ -1,13 +1,13 @@
 package com.example.gameproject.web;
 
+import com.alibaba.fastjson.JSON;
+import com.example.gameproject.bean.model.GameRecord;
 import com.example.gameproject.bean.model.Question;
-import com.example.gameproject.bean.model.Relationship;
 import com.example.gameproject.bean.model.User;
+import com.example.gameproject.bean.response.HttpResult;
 import com.example.gameproject.service.QuestionService;
 import com.example.gameproject.service.TestService;
-import com.example.gameproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +23,15 @@ public class TestAPI {
     private QuestionService questionService;
 
 
-    @GetMapping("/getQuestion")
-    public Question getQuestion() {
-        return testService.getQuestion();
+    @GetMapping("/getAll")
+    public List<User> getQuestion() {
+        return testService.testGetAll();
+    }
+
+    @GetMapping("/addGame")
+    public String addGame() {
+        testService.testAddGameRecord();
+        return "fuck";
     }
 
 

@@ -2,13 +2,12 @@ package com.example.wuziqi.retrofit;
 
 
 import com.example.wuziqi.bean.request.EnterRequest;
-import com.example.wuziqi.bean.request.FriendRequest;
-import com.example.wuziqi.bean.request.InviteRequest;
+import com.example.wuziqi.bean.request.PointRequest;
 import com.example.wuziqi.bean.request.UserRequest;
 import com.example.wuziqi.bean.response.EnterResponse;
-import com.example.wuziqi.bean.response.FriendResponse;
+import com.example.wuziqi.bean.response.RankResponse;
 import com.example.wuziqi.bean.response.HallResponse;
-import com.example.wuziqi.bean.response.InviteResponse;
+import com.example.wuziqi.bean.response.HistoryResponse;
 import com.example.wuziqi.bean.response.QuestionResponse;
 import com.example.wuziqi.bean.response.UserResponse;
 
@@ -40,20 +39,20 @@ public interface RetrofitService {
     Observable<UserResponse> changePassword(@Body UserRequest request);
 
     //修改密码
-    @POST("/user/addFriend")
-    Observable<FriendResponse> addFriend(@Body FriendRequest request);
+    @GET("/user/rankList")
+    Observable<RankResponse> getRankList();
 
-    //修改密码
-    @POST("/user/getFriends")
-    Observable<FriendResponse> getFriends(@Body FriendRequest request);
+    //查询个人信息
+    @GET("/user/personal")
+    Observable<UserResponse> getPersonalInfo(@Query("userId") long userId);
+
+    //下棋
+    @GET("/user/history")
+    Observable<HistoryResponse> getHistory(@Query("userId") long userId);
 
     //获取题目
     @GET("/question/get")
     Observable<QuestionResponse> getQuestion();
-
-    //邀请好友
-    @POST("/game/invite")
-    Observable<InviteResponse> inviteFriend(@Body InviteRequest request);
 
     //获取最新大厅
     @GET("/game/getHallList")
@@ -74,5 +73,10 @@ public interface RetrofitService {
     //获取单个大厅信息
     @GET("/game/getHall")
     Observable<HallResponse> getHall(@Query("hallId") int hallId);
+
+    //下棋
+    @POST("/game/chess")
+    Observable<EnterResponse> putChess(@Body PointRequest request);
+
 
 }

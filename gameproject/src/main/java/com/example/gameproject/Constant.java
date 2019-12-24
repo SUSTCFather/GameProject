@@ -14,6 +14,10 @@ public class Constant {
 
     public static final int STARTED = 2;
 
+    public static final int WIN_POINT = 5;
+
+    public static final int LOSE_POINT = -5;
+
     //胜利棋子数量
     public static final int MAX_COUNT_IN_LINE = 5;
 

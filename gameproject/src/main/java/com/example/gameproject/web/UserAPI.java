@@ -2,6 +2,7 @@ package com.example.gameproject.web;
 
 import com.alibaba.fastjson.JSON;
 import com.example.gameproject.Constant;
+import com.example.gameproject.bean.model.GameRecord;
 import com.example.gameproject.bean.request.FriendRequest;
 import com.example.gameproject.bean.request.UserRequest;
 import com.example.gameproject.bean.response.HttpResult;
@@ -10,6 +11,8 @@ import com.example.gameproject.service.MailService;
 import com.example.gameproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -77,14 +80,19 @@ public class UserAPI {
         }
     }
 
-    @PostMapping("/addFriend")
-    public HttpResult addFriend(@RequestBody FriendRequest request) {
-        return userService.addFriend(request);
+    @GetMapping("/personal")
+    public HttpResult getPersonInfo(long userId) {
+        return userService.getPersonInfo(userId);
     }
 
-    @PostMapping("/getFriends")
-    public HttpResult getFriends(@RequestBody FriendRequest request) {
-        return userService.getFriends(request);
+    @GetMapping("/history")
+    public HttpResult getHistory(long userId) {
+        return userService.getHistory(userId);
+    }
+
+    @GetMapping("/rankList")
+    public HttpResult getRankList() {
+        return userService.getRankList();
     }
 
 }

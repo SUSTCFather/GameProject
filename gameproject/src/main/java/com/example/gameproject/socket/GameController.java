@@ -23,6 +23,8 @@ public class GameController {
      */
     private Session session;
 
+    private boolean isStart;
+
     @OnOpen
     public void onOpen(Session session, @PathParam("user") String userId){
         //获取用户ID
@@ -59,5 +61,13 @@ public class GameController {
 
     public Session getSession() {
         return session;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
+
+    public boolean isStart() {
+        return isStart;
     }
 }

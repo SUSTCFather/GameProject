@@ -12,12 +12,17 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.fastjson.JSON;
-import com.example.wuziqi.Constant;
+import com.example.wuziqi.about.AboutActivity;
+import com.example.wuziqi.util.Constant;
 import com.example.wuziqi.LaunchActivity;
 import com.example.wuziqi.R;
-import com.example.wuziqi.SharedUtil;
+import com.example.wuziqi.util.SharedUtil;
 import com.example.wuziqi.bean.User;
 import com.example.wuziqi.dialog.ExitDialog;
+import com.example.wuziqi.forget.ForgetActivity;
+import com.example.wuziqi.history.HistoryActivity;
+import com.example.wuziqi.rank.RankActivity;
+import com.example.wuziqi.personal.PersonalActivity;
 
 
 public class MineFragment extends Fragment implements View.OnClickListener {
@@ -80,23 +85,38 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.tv_exit).setOnClickListener(this);
     }
 
+    private void jumpToPersonal() {
+        Intent intent = new Intent(getActivity(), PersonalActivity.class);
+        intent.putExtra(Constant.USER_ID,user.getUserId());
+        startActivity(intent);
+    }
+
+    private void jumpToHistory() {
+        Intent intent = new Intent(getActivity(), HistoryActivity.class);
+        intent.putExtra(Constant.USER_ID,user.getUserId());
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mine_card:
-                showToast("头像");
+                jumpToPersonal();
                 break;
             case R.id.setPassword:
-                showToast("修改密码");
+                Intent it2 = new Intent(getActivity(), ForgetActivity.class);
+                startActivity(it2);
                 break;
             case R.id.history:
-                showToast("历史");
+                jumpToHistory();
                 break;
             case R.id.rank_list:
-                showToast("排行榜");
+                Intent it3 = new Intent(getActivity(), RankActivity.class);
+                startActivity(it3);
                 break;
             case R.id.about:
-                showToast("关于");
+                Intent it4 = new Intent(getActivity(), AboutActivity.class);
+                startActivity(it4);
                 break;
             case R.id.tv_exit:
                 exitDialog.show();
